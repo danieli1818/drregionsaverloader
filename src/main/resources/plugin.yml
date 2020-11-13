@@ -1,0 +1,10 @@
+name: region-saver-loader
+version: ${project.version}
+main: me.danieli1818.dr.region_saver_loader.RegionSaverLoader
+authors: [DanielRottner]
+description: DRRegionSaverLoader Plugin For Saving And Loading Regions.
+api-version: 1.16
+
+commands:
+    drregion:
+        description: shows help page.
