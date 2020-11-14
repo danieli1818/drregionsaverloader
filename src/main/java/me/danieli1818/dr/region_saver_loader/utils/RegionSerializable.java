@@ -167,4 +167,3 @@ public class RegionSerializable implements ConfigurationSerializable {
 	}
 	
 }
-
