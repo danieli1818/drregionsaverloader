@@ -99,7 +99,6 @@ public class RegionSaverLoaderCommands implements CommandExecutor {
 	}
 
 	public boolean loadRegion(String name) {
-		reloadConfig();
 		this.stationsConfig.getSerializable(name, RegionSerializable.class);
 		return true;
 	}
