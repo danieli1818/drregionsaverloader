@@ -49,6 +49,7 @@ public class RegionSaverLoaderCommands implements CommandExecutor {
 				return false;
 			} else {
 				sender.sendMessage("Successfully reloaded the config file!");
+				return true;
 			}
 		}
 		if (args.length != 2) {
