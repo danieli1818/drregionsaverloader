@@ -19,6 +19,7 @@ public class SavingAndLoadingUtils {
 	
 	public static void registerConfigurationSerializables() {
 		ConfigurationSerialization.registerClass(RegionSerializable.class);
+		ConfigurationSerialization.registerClass(Coordinates.class);
 		
 	}
 	
