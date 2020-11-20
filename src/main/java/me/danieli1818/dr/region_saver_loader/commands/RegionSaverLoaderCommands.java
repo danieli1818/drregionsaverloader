@@ -38,11 +38,24 @@ public class RegionSaverLoaderCommands implements CommandExecutor {
 			sender.sendMessage("You don't have permission to run this command!");
 			return false;
 		}
-		if (args.length != 2) {
+		if (args.length <= 0) {
 			sender.sendMessage("Invalid command! Use /help for help!");
 			return false;
 		}
 		String subcommand = args[0].toLowerCase();
+		if (subcommand.equals("reload")) { 
+			if (!reloadConfig()) {
+				sender.sendMessage("The has been an error reloading the config file!");
+				return false;
+			} else {
+				sender.sendMessage("Successfully reloaded the config file!");
+				return true;
+			}
+		}
+		if (args.length != 2) {
+			sender.sendMessage("Invalid command! Use /help for help!");
+			return false;
+		}
 		String name = args[1].toLowerCase();
 		if (subcommand.equals("save")) {
 			if (!(sender instanceof Player)) {
@@ -62,13 +75,6 @@ public class RegionSaverLoaderCommands implements CommandExecutor {
 				return false;
 			} else {
 				sender.sendMessage("Successfully loaded region \"" + name + "\"!");
-			}
-		} else if (subcommand.equals("reload")) {
-			if (!reloadConfig()) {
-				sender.sendMessage("The has been an error reloading the config file!");
-				return false;
-			} else {
-				sender.sendMessage("Successfully reloaded the config file!");
 			}
 		} else {
 			sender.sendMessage("Invalid command! Use /help for help!");

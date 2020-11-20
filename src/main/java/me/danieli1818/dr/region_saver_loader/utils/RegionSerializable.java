@@ -52,14 +52,14 @@ public class RegionSerializable implements ConfigurationSerializable {
 		int max_x = (Integer) serialization.get("max_x");
 		int max_y = (Integer) serialization.get("max_y");
 		int max_z = (Integer) serialization.get("max_z");
-		World world = BukkitAdapter.adapt(Bukkit.getWorld(worldName));
+		final org.bukkit.World world = Bukkit.getWorld(worldName);
 		BlockVector3 minimumPoint = BlockVector3.at(min_x, min_y, min_z);
 		BlockVector3 maximumPoint = BlockVector3.at(max_x, max_y, max_z);
-		Region region = new CuboidRegion(world, minimumPoint, maximumPoint);
+		Region region = new CuboidRegion(BukkitAdapter.adapt(world), minimumPoint, maximumPoint);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(RegionSaverLoader.getPlugin(RegionSaverLoader.class), new Runnable() {
 			
 			public void run() {
-				buildBlocks((Map<String, List<Location>>) serialization.get("blocks"));
+				buildBlocks((Map<String, List<Coordinates>>) serialization.get("blocks"), world);
 				
 			}
 		});
@@ -103,9 +103,9 @@ public class RegionSerializable implements ConfigurationSerializable {
 		});
 	}
 	
-	private Map<String, List<Location>> getBlocksMaterialsMap() {
+	private Map<String, List<Coordinates>> getBlocksMaterialsMap() {
 		
-		final Map<String, List<Location>> blocksMaterialsMap = new HashMap<String, List<Location>>();
+		final Map<String, List<Coordinates>> blocksMaterialsMap = new HashMap<String, List<Coordinates>>();
 
 		this.region.forEach(new Consumer<BlockVector3>() {
 
@@ -115,10 +115,10 @@ public class RegionSerializable implements ConfigurationSerializable {
 				String material = location.getBlock().getType().toString();
 				
 				if (!blocksMaterialsMap.containsKey(material)) {
-					blocksMaterialsMap.put(material, new ArrayList<Location>());
+					blocksMaterialsMap.put(material, new ArrayList<Coordinates>());
 				}
 				
-				blocksMaterialsMap.get(material).add(location);
+				blocksMaterialsMap.get(material).add(Coordinates.fromLocation(location));
 				
 				
 			}
@@ -127,18 +127,17 @@ public class RegionSerializable implements ConfigurationSerializable {
 		return blocksMaterialsMap;
 	}
 	
-	private static boolean buildBlocks(Map<String, List<Location>> blocksMaterialsMap) {
+	private static boolean buildBlocks(Map<String, List<Coordinates>> blocksMaterialsMap, org.bukkit.World world) {
 		if (blocksMaterialsMap == null) {
 			return false;
 		}
-		org.bukkit.World world = blocksMaterialsMap.get(blocksMaterialsMap.keySet().iterator().next()).get(0).getWorld();
 		for (String material : blocksMaterialsMap.keySet()) {
 			Material materialEnum = Material.getMaterial(material);
-			for (Location location : blocksMaterialsMap.get(material)) {
-				if (location.getBlock().getType() != materialEnum) {
-					location.getBlock().setType(materialEnum);
+			for (Coordinates coordinates : blocksMaterialsMap.get(material)) {
+//				if (location.getBlock().getType() != materialEnum) {
+					coordinates.getLocation(world).getBlock().setType(materialEnum);
 //				setBlockInNativeDataPalette(world, location.getBlockX(), location.getBlockY(), location.getBlockZ(), materialEnum.getId(), (byte) 0, true);
-				}
+//				}
 			}
 		}
 		return true;
