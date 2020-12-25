@@ -31,7 +31,7 @@ public class RegionSaverLoaderCommands implements CommandExecutor {
 
 	private static FileConfiguration stationsConfig = plugin.getConfig();
 
-	private static File stationsConfigFile = plugin.getConfigFile();
+//	private static File stationsConfigFile = plugin.getConfigFile();
 
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (!sender.hasPermission("drregionsaverloader")) {
@@ -96,7 +96,7 @@ public class RegionSaverLoaderCommands implements CommandExecutor {
 			return false;
 		}
 		try {
-			SavingAndLoadingUtils.saveSerializable(new RegionSerializable(region), this.stationsConfig, this.stationsConfigFile, name);
+			SavingAndLoadingUtils.saveSerializable(new RegionSerializable(region), this.stationsConfig, plugin.getConfigFile(), name);
 		} catch (IOException e) {
 			e.printStackTrace();
 			player.sendMessage("There has been an error saving the region!");
@@ -111,9 +111,11 @@ public class RegionSaverLoaderCommands implements CommandExecutor {
 
 	private boolean reloadConfig() {
 		try {
-			this.stationsConfigFile = plugin.getConfigFile();
-			this.stationsConfig = new YamlConfiguration();
-			this.stationsConfig.load(this.stationsConfigFile);
+			plugin.reloadConfigFiles();
+			this.stationsConfig = plugin.getConfig();
+//			this.stationsConfigFile = plugin.getConfigFile();
+//			this.stationsConfig = new YamlConfiguration();
+//			this.stationsConfig.load(this.stationsConfigFile);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -127,6 +129,7 @@ public class RegionSaverLoaderCommands implements CommandExecutor {
 			e.printStackTrace();
 			return false;
 		}
+		RegionSerializable.reloadConfig();
 		return true;
 	}
 

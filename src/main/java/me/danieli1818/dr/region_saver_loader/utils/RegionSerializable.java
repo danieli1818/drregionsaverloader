@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 
@@ -27,7 +28,9 @@ import net.minecraft.server.v1_12_R1.IBlockData;
 public class RegionSerializable implements ConfigurationSerializable {
 
 	private Region region;
-
+	
+	private static MemorySection materialsVersionConversionMap = (MemorySection) RegionSaverLoader.getPlugin(RegionSaverLoader.class).getVersionConversionConfig().get("map");
+	
 	public RegionSerializable(final Region region) {
 		this.region = region;
 		
@@ -139,6 +142,17 @@ public class RegionSerializable implements ConfigurationSerializable {
 //		org.bukkit.World world = blocksMaterialsMap.get(blocksMaterialsMap.keySet().iterator().next()).get(0).getWorld();
 		for (String material : blocksMaterialsMap.keySet()) {
 			Material materialEnum = Material.getMaterial(material);
+			System.out.println(RegionSerializable.materialsVersionConversionMap);
+			if (RegionSerializable.materialsVersionConversionMap.contains(material)) {
+				materialEnum = Material.getMaterial(RegionSerializable.materialsVersionConversionMap.getString(material));
+			}
+//			if (material.equals("STONE_BRICKS")) {
+//				materialEnum = Material.getMaterial("SMOOTH_BRICK");
+//			}
+			if (materialEnum == null) {
+				System.out.println(material);
+				continue;
+			}
 			for (Coordinates coordinates : blocksMaterialsMap.get(material)) {
 //				if (location.getBlock().getType() != materialEnum) {
 				coordinates.getLocation(world).getBlock().setType(materialEnum);
@@ -165,6 +179,10 @@ public class RegionSerializable implements ConfigurationSerializable {
 	    else
 	    	cs.getBlocks().setBlock(x & 15, y & 15, z & 15, ibd);
 //	       cs.getBlocks().b(x & 15, y & 15, z & 15, ibd);
+	}
+	
+	public static void reloadConfig() {
+		RegionSerializable.materialsVersionConversionMap = (MemorySection) RegionSaverLoader.getPlugin(RegionSaverLoader.class).getVersionConversionConfig().get("map");
 	}
 	
 }
