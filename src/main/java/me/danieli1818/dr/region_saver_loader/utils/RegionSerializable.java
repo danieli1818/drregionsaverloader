@@ -23,6 +23,7 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.World;
 
 import me.danieli1818.dr.region_saver_loader.RegionSaverLoader;
+import me.danieli1818.dr.region_saver_loader.utils.serialization.Coordinates;
 import net.minecraft.server.v1_12_R1.ChunkSection;
 import net.minecraft.server.v1_12_R1.IBlockData;
 

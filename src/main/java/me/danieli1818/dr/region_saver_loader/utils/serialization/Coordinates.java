@@ -1,4 +1,4 @@
-package me.danieli1818.dr.region_saver_loader.utils;
+package me.danieli1818.dr.region_saver_loader.utils.serialization;
 
 import java.util.HashMap;
 import java.util.Map;

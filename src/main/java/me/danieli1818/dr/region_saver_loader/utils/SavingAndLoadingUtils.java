@@ -7,6 +7,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
+import me.danieli1818.dr.region_saver_loader.utils.serialization.Coordinates;
+
 
 public class SavingAndLoadingUtils {
 
