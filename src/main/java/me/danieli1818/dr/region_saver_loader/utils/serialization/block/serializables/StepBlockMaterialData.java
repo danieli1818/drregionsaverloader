@@ -7,13 +7,13 @@ import org.bukkit.block.Block;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.Step;
 
-import me.danieli1818.dr.region_saver_loader.utils.serialization.BlockMaterial;
+import me.danieli1818.dr.region_saver_loader.utils.serialization.BlockMaterialData;
 
-public class StepBlockMaterial implements BlockMaterial {
+public class StepBlockMaterialData implements BlockMaterialData {
 	
 	private boolean isTop;
 	
-	public StepBlockMaterial(boolean isTop) {
+	public StepBlockMaterialData(boolean isTop) {
 		this.isTop = isTop;
 	}
 
@@ -23,11 +23,11 @@ public class StepBlockMaterial implements BlockMaterial {
 		return map;
 	}
 	
-	public static StepBlockMaterial deserialize(Map<String, Object> serializationMap) {
+	public static StepBlockMaterialData deserialize(Map<String, Object> serializationMap) {
 		if (serializationMap.containsKey("isTop")) {
 			Object isTop = serializationMap.get("isTop");
 			if (isTop instanceof Boolean) {
-				return new StepBlockMaterial((Boolean)isTop);
+				return new StepBlockMaterialData((Boolean)isTop);
 			}
 		}
 		return null;
