@@ -27,7 +27,7 @@ public class DirectionalBlockMaterialData implements BlockMaterialData {
 		return map;
 	}
 	
-	public DirectionalBlockMaterialData deserialize(Map<String, Object> serializationMap) {
+	public static DirectionalBlockMaterialData deserialize(Map<String, Object> serializationMap) {
 		if (serializationMap.containsKey("blockFace")) {
 			Object blockFace = serializationMap.get("blockFace");
 			if (blockFace instanceof String) {
@@ -44,6 +44,10 @@ public class DirectionalBlockMaterialData implements BlockMaterialData {
 			return true;
 		}
 		return false;
+	}
+	
+	public BlockFace getBlockFace() {
+		return this.blockFace;
 	}
 
 }
