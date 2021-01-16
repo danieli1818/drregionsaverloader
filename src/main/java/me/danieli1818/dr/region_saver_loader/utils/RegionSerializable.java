@@ -164,7 +164,7 @@ public class RegionSerializable implements ConfigurationSerializable {
 //			if (material.equals("STONE_BRICKS")) {
 //				materialEnum = Material.getMaterial("SMOOTH_BRICK");
 //			}
-			if (materialEnum == null) {
+			if (materialEnum == null) { // Check if there has been a problem.
 				System.out.println(material);
 				continue;
 			}
