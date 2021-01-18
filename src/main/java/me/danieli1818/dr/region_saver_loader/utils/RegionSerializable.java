@@ -23,6 +23,7 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.World;
 
 import me.danieli1818.dr.region_saver_loader.RegionSaverLoader;
+import me.danieli1818.dr.region_saver_loader.utils.serialization.BlockSerializable;
 import me.danieli1818.dr.region_saver_loader.utils.serialization.Coordinates;
 import net.minecraft.server.v1_12_R1.ChunkSection;
 import net.minecraft.server.v1_12_R1.IBlockData;
@@ -69,7 +70,7 @@ public class RegionSerializable implements ConfigurationSerializable {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(RegionSaverLoader.getPlugin(RegionSaverLoader.class), new Runnable() {
 			
 			public void run() {
-				buildBlocks((Map<String, List<Coordinates>>) serialization.get("blocks"), world);
+				buildBlocks((Map<String, List<BlockSerializable>>) serialization.get("blocks"), world);
 				
 			}
 		});
@@ -113,9 +114,9 @@ public class RegionSerializable implements ConfigurationSerializable {
 		});
 	}
 	
-	private Map<String, List<Coordinates>> getBlocksMaterialsMap() {
+	private Map<String, List<BlockSerializable>> getBlocksMaterialsMap() {
 		
-		final Map<String, List<Coordinates>> blocksMaterialsMap = new HashMap<String, List<Coordinates>>();
+		final Map<String, List<BlockSerializable>> blocksMaterialsMap = new HashMap<String, List<BlockSerializable>>();
 
 		this.region.forEach(new Consumer<Vector>() {
 
@@ -125,10 +126,10 @@ public class RegionSerializable implements ConfigurationSerializable {
 				String material = location.getBlock().getType().toString();
 				
 				if (!blocksMaterialsMap.containsKey(material)) {
-					blocksMaterialsMap.put(material, new ArrayList<Coordinates>());
+					blocksMaterialsMap.put(material, new ArrayList<BlockSerializable>());
 				}
 				
-				blocksMaterialsMap.get(material).add(Coordinates.fromLocation(location));
+				blocksMaterialsMap.get(material).add(new BlockSerializable(location.getBlock()));
 				
 				
 			}
@@ -137,7 +138,7 @@ public class RegionSerializable implements ConfigurationSerializable {
 		return blocksMaterialsMap;
 	}
 	
-	private static boolean buildBlocks(Map<String, List<Coordinates>> blocksMaterialsMap, org.bukkit.World world) {
+	private static boolean buildBlocks(Map<String, List<BlockSerializable>> blocksMaterialsMap, org.bukkit.World world) {
 		if (blocksMaterialsMap == null) {
 			return false;
 		}
@@ -145,7 +146,7 @@ public class RegionSerializable implements ConfigurationSerializable {
 		for (String material : blocksMaterialsMap.keySet()) {
 			Material materialEnum = Material.getMaterial(material);
 			System.out.println(RegionSerializable.materialsVersionConversionMap);
-			Integer data = null;
+			Byte data = null;
 			if (RegionSerializable.materialsVersionConversionMap.contains(material)) {
 				String current_version_material_and_data = RegionSerializable.materialsVersionConversionMap.getString(material);
 				String[] material_and_data = current_version_material_and_data.split("\\|");
@@ -154,7 +155,7 @@ public class RegionSerializable implements ConfigurationSerializable {
 				if (material_and_data.length > 1) {
 					try {
 						System.out.println(material_and_data[1]);
-						data = Integer.parseInt(material_and_data[1]);
+						data = Byte.parseByte(material_and_data[1]);
 					} catch(NumberFormatException e) {
 						
 					}
@@ -168,23 +169,13 @@ public class RegionSerializable implements ConfigurationSerializable {
 				System.out.println(material);
 				continue;
 			}
-			if (data != null) {
-				for (Coordinates coordinates : blocksMaterialsMap.get(material)) {
-//					if (location.getBlock().getType() != materialEnum) {
-					Block block = coordinates.getLocation(world).getBlock();
-					block.setType(materialEnum);
-					block.setData(data.byteValue());
-//					setBlockInNativeDataPalette(world, location.getBlockX(), location.getBlockY(), location.getBlockZ(), materialEnum.getId(), (byte) 0, true);
-//					}
-				}
-				
-			} else {
-				for (Coordinates coordinates : blocksMaterialsMap.get(material)) {
-//					if (location.getBlock().getType() != materialEnum) {
-					coordinates.getLocation(world).getBlock().setType(materialEnum);
-//					setBlockInNativeDataPalette(world, location.getBlockX(), location.getBlockY(), location.getBlockZ(), materialEnum.getId(), (byte) 0, true);
-//					}
-				}
+			for (BlockSerializable blockSerializable : blocksMaterialsMap.get(material)) {
+//				if (location.getBlock().getType() != materialEnum) {
+				blockSerializable.setBlock(world, materialEnum, data);
+//				block.setType(materialEnum);
+//				block.setData(data.byteValue());
+//				setBlockInNativeDataPalette(world, location.getBlockX(), location.getBlockY(), location.getBlockZ(), materialEnum.getId(), (byte) 0, true);
+//				}
 			}
 		}
 		return true;

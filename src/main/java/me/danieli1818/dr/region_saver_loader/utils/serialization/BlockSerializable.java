@@ -7,12 +7,35 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.material.Directional;
+import org.bukkit.material.MaterialData;
+import org.bukkit.material.Step;
+
+import me.danieli1818.dr.region_saver_loader.utils.serialization.block.serializables.DirectionalBlockMaterialData;
+import me.danieli1818.dr.region_saver_loader.utils.serialization.block.serializables.SignBlockMaterialData;
+import me.danieli1818.dr.region_saver_loader.utils.serialization.block.serializables.StepBlockMaterialData;
 
 public class BlockSerializable implements ConfigurationSerializable {
 
 	private Coordinates coordinates;
 	private BlockMaterialData data;
+	
+	public BlockSerializable(Block block) {
+		
+		this.coordinates = Coordinates.fromLocation(block.getLocation());
+		MaterialData md = block.getState().getData();
+		if (md instanceof Step) {
+			this.data = new StepBlockMaterialData(((Step) md).isInverted());
+		} else if (block.getState() instanceof Sign) {
+			this.data = new SignBlockMaterialData((Sign)block.getState());
+		} else if (md instanceof Directional) {
+			this.data = new DirectionalBlockMaterialData(((Directional)md).getFacing());
+		} else {
+			this.data = null;
+		}
+	}
 	
 	public BlockSerializable(Coordinates coordinates) {
 		this.coordinates = coordinates;
@@ -60,6 +83,10 @@ public class BlockSerializable implements ConfigurationSerializable {
 		}
 		this.data.addToBlock(block);
 		return true;
+	}
+	
+	public Location getLocation(World world) {
+		this.coordinates.getLocation(world);
 	}
 
 }

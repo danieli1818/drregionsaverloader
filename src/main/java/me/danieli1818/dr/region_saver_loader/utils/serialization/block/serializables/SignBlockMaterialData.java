@@ -15,10 +15,17 @@ import me.danieli1818.dr.region_saver_loader.utils.serialization.BlockMaterialDa
 public class SignBlockMaterialData extends DirectionalBlockMaterialData implements BlockMaterialData {
 	
 	private String[] text;
+	private boolean isWallSign;
 	
-	public SignBlockMaterialData(BlockFace blockFace, String[] text) {
+	public SignBlockMaterialData(BlockFace blockFace, String[] text, boolean isWallSign) {
 		super(blockFace);
 		this.text = text;
+		this.isWallSign = isWallSign;
+	}
+	
+	public SignBlockMaterialData(Sign sign) {
+		this(((org.bukkit.material.Sign)sign.getData()).getFacing(), sign.getLines()
+				, ((org.bukkit.material.Sign)sign.getData()).isWallSign());
 	}
 
 	public Map<String, Object> serialize() {
