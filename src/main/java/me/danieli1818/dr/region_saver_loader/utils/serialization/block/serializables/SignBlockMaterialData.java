@@ -1,6 +1,8 @@
 package me.danieli1818.dr.region_saver_loader.utils.serialization.block.serializables;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.block.Block;
@@ -31,18 +33,25 @@ public class SignBlockMaterialData extends DirectionalBlockMaterialData implemen
 	public Map<String, Object> serialize() {
 		Map<String, Object> map = super.serialize();
 		map.put("text", this.text);
+		map.put("isWallSign", Boolean.toString(this.isWallSign));
 		return map;
 	}
 	
 	public static SignBlockMaterialData deserialize(Map<String, Object> serializationMap) {
 		DirectionalBlockMaterialData md = DirectionalBlockMaterialData.deserialize(serializationMap);
 		if (md == null) {
+			System.out.println("md is null!");
 			return null;
 		}
-		if (serializationMap.containsKey("text")) {
+		if (serializationMap.containsKey("text") && serializationMap.containsKey("isWallSign")) {
 			Object text = serializationMap.get("text");
-			if (text instanceof String[]) {
-				return new SignBlockMaterialData(md.getBlockFace(), (String[])text);
+			Object isWallSign = serializationMap.get("isWallSign");
+			System.out.println("text: " + text.toString() + ", " + text.getClass().toString());
+			System.out.println("isWallSign: " + isWallSign.toString() + ", " + text.getClass().toString());
+			if (text instanceof List<?> && isWallSign instanceof String) {
+				List<String> textList = (List<String>)text;
+				return new SignBlockMaterialData(md.getBlockFace(), Arrays.copyOf(textList.toArray(), textList.size(), String[].class)
+						, Boolean.parseBoolean(isWallSign.toString()));
 			}
 		}
 		return null;
@@ -56,6 +65,7 @@ public class SignBlockMaterialData extends DirectionalBlockMaterialData implemen
 			for (int i = 0; i < this.text.length; i++) {
 				sign.setLine(i, this.text[i]);
 			}
+			sign.update();
 			return true;
 		}
 		return false;

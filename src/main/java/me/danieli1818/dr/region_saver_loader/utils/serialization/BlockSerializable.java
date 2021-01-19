@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.material.Attachable;
 import org.bukkit.material.Directional;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.Step;
@@ -31,7 +32,11 @@ public class BlockSerializable implements ConfigurationSerializable {
 		} else if (block.getState() instanceof Sign) {
 			this.data = new SignBlockMaterialData((Sign)block.getState());
 		} else if (md instanceof Directional) {
-			this.data = new DirectionalBlockMaterialData(((Directional)md).getFacing());
+			if (md instanceof Attachable) {
+				this.data = new DirectionalBlockMaterialData(((Attachable)md).getAttachedFace());
+			} else {
+				this.data = new DirectionalBlockMaterialData(((Directional)md).getFacing());
+			}
 		} else {
 			this.data = null;
 		}
@@ -81,12 +86,14 @@ public class BlockSerializable implements ConfigurationSerializable {
 		if (data != null) {
 			block.setData(data);
 		}
-		this.data.addToBlock(block);
+		if (this.data != null) {
+			this.data.addToBlock(block);
+		}
 		return true;
 	}
 	
 	public Location getLocation(World world) {
-		this.coordinates.getLocation(world);
+		return this.coordinates.getLocation(world);
 	}
 
 }

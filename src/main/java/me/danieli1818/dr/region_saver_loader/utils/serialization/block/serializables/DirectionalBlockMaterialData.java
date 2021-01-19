@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.material.Directional;
 import org.bukkit.material.MaterialData;
 
@@ -29,18 +30,22 @@ public class DirectionalBlockMaterialData implements BlockMaterialData {
 	
 	public static DirectionalBlockMaterialData deserialize(Map<String, Object> serializationMap) {
 		if (serializationMap.containsKey("blockFace")) {
+			System.out.println("yay block face 1");
 			Object blockFace = serializationMap.get("blockFace");
 			if (blockFace instanceof String) {
-				return new DirectionalBlockMaterialData(BlockFace.valueOf());
+				System.out.println("yay block face 2");
+				return new DirectionalBlockMaterialData(BlockFace.valueOf((String)blockFace));
 			}
 		}
 		return null;
 	}
 
 	public boolean addToBlock(Block block) {
-		MaterialData data = block.getState().getData();
+		BlockState state = block.getState();
+		MaterialData data = state.getData();
 		if (data instanceof Directional) {
 			((Directional)data).setFacingDirection(this.blockFace);
+			state.update();
 			return true;
 		}
 		return false;
