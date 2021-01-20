@@ -12,10 +12,12 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.Directional;
 import org.bukkit.material.MaterialData;
+import org.bukkit.material.Stairs;
 import org.bukkit.material.Step;
 
 import me.danieli1818.dr.region_saver_loader.utils.serialization.block.serializables.DirectionalBlockMaterialData;
 import me.danieli1818.dr.region_saver_loader.utils.serialization.block.serializables.SignBlockMaterialData;
+import me.danieli1818.dr.region_saver_loader.utils.serialization.block.serializables.StairsBlockMaterialData;
 import me.danieli1818.dr.region_saver_loader.utils.serialization.block.serializables.StepBlockMaterialData;
 
 public class BlockSerializable implements ConfigurationSerializable {
@@ -31,6 +33,8 @@ public class BlockSerializable implements ConfigurationSerializable {
 			this.data = new StepBlockMaterialData(((Step) md).isInverted());
 		} else if (block.getState() instanceof Sign) {
 			this.data = new SignBlockMaterialData((Sign)block.getState());
+		} else if (md instanceof Stairs) {
+			this.data = new StairsBlockMaterialData(((Stairs)md).getFacing().getOppositeFace(), ((Stairs)md).isInverted());
 		} else if (md instanceof Directional) {
 			if (md instanceof Attachable) {
 				this.data = new DirectionalBlockMaterialData(((Attachable)md).getAttachedFace());

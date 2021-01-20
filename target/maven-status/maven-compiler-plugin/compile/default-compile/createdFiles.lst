@@ -9,5 +9,6 @@ me\danieli1818\dr\region_saver_loader\commands\RegionSaverLoaderCommands.class
 me\danieli1818\dr\region_saver_loader\utils\SavingAndLoadingUtils.class
 me\danieli1818\dr\region_saver_loader\utils\serialization\block\serializables\SignBlockMaterialData.class
 me\danieli1818\dr\region_saver_loader\utils\serialization\BlockMaterialData.class
+me\danieli1818\dr\region_saver_loader\utils\serialization\block\serializables\StairsBlockMaterialData.class
 me\danieli1818\dr\region_saver_loader\utils\RegionSerializable$2.class
 me\danieli1818\dr\region_saver_loader\utils\serialization\block\serializables\StepBlockMaterialData.class

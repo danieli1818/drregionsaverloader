@@ -11,6 +11,7 @@ import me.danieli1818.dr.region_saver_loader.utils.serialization.BlockSerializab
 import me.danieli1818.dr.region_saver_loader.utils.serialization.Coordinates;
 import me.danieli1818.dr.region_saver_loader.utils.serialization.block.serializables.DirectionalBlockMaterialData;
 import me.danieli1818.dr.region_saver_loader.utils.serialization.block.serializables.SignBlockMaterialData;
+import me.danieli1818.dr.region_saver_loader.utils.serialization.block.serializables.StairsBlockMaterialData;
 import me.danieli1818.dr.region_saver_loader.utils.serialization.block.serializables.StepBlockMaterialData;
 
 
@@ -29,6 +30,7 @@ public class SavingAndLoadingUtils {
 		ConfigurationSerialization.registerClass(StepBlockMaterialData.class);
 		ConfigurationSerialization.registerClass(DirectionalBlockMaterialData.class);
 		ConfigurationSerialization.registerClass(SignBlockMaterialData.class);
+		ConfigurationSerialization.registerClass(StairsBlockMaterialData.class);
 		ConfigurationSerialization.registerClass(BlockSerializable.class);
 
 		
