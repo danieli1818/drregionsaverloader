@@ -10,20 +10,27 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.math.Vector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.World;
 
 import me.danieli1818.dr.region_saver_loader.RegionSaverLoader;
+import me.danieli1818.dr.region_saver_loader.utils.serialization.BlockSerializable;
+import me.danieli1818.dr.region_saver_loader.utils.serialization.Coordinates;
 
 public class RegionSerializable implements ConfigurationSerializable {
 
 	private Region region;
-
+	
+	private static MemorySection materialsVersionConversionMap = (MemorySection) RegionSaverLoader.getPlugin(RegionSaverLoader.class).getVersionConversionConfig().get("map");
+	
 	public RegionSerializable(final Region region) {
 		this.region = region;
 		
@@ -52,14 +59,15 @@ public class RegionSerializable implements ConfigurationSerializable {
 		int max_x = (Integer) serialization.get("max_x");
 		int max_y = (Integer) serialization.get("max_y");
 		int max_z = (Integer) serialization.get("max_z");
+//		World world = BukkitUtil.getLocalWorld(Bukkit.getWorld(worldName));
 		final org.bukkit.World world = Bukkit.getWorld(worldName);
 		BlockVector3 minimumPoint = BlockVector3.at(min_x, min_y, min_z);
 		BlockVector3 maximumPoint = BlockVector3.at(max_x, max_y, max_z);
-		Region region = new CuboidRegion(BukkitAdapter.adapt(world), minimumPoint, maximumPoint);
+		Region region = new CuboidRegion(new BukkitWorld(world), minimumPoint, maximumPoint);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(RegionSaverLoader.getPlugin(RegionSaverLoader.class), new Runnable() {
 			
 			public void run() {
-				buildBlocks((Map<String, List<Coordinates>>) serialization.get("blocks"), world);
+				buildBlocks((Map<String, List<BlockSerializable>>) serialization.get("blocks"), world);
 				
 			}
 		});
@@ -103,9 +111,9 @@ public class RegionSerializable implements ConfigurationSerializable {
 		});
 	}
 	
-	private Map<String, List<Coordinates>> getBlocksMaterialsMap() {
+	private Map<String, List<BlockSerializable>> getBlocksMaterialsMap() {
 		
-		final Map<String, List<Coordinates>> blocksMaterialsMap = new HashMap<String, List<Coordinates>>();
+		final Map<String, List<BlockSerializable>> blocksMaterialsMap = new HashMap<String, List<BlockSerializable>>();
 
 		this.region.forEach(new Consumer<BlockVector3>() {
 
@@ -115,10 +123,10 @@ public class RegionSerializable implements ConfigurationSerializable {
 				String material = location.getBlock().getType().toString();
 				
 				if (!blocksMaterialsMap.containsKey(material)) {
-					blocksMaterialsMap.put(material, new ArrayList<Coordinates>());
+					blocksMaterialsMap.put(material, new ArrayList<BlockSerializable>());
 				}
 				
-				blocksMaterialsMap.get(material).add(Coordinates.fromLocation(location));
+				blocksMaterialsMap.get(material).add(new BlockSerializable(location.getBlock()));
 				
 				
 			}
@@ -127,15 +135,42 @@ public class RegionSerializable implements ConfigurationSerializable {
 		return blocksMaterialsMap;
 	}
 	
-	private static boolean buildBlocks(Map<String, List<Coordinates>> blocksMaterialsMap, org.bukkit.World world) {
+	private static boolean buildBlocks(Map<String, List<BlockSerializable>> blocksMaterialsMap, org.bukkit.World world) {
 		if (blocksMaterialsMap == null) {
 			return false;
 		}
+//		org.bukkit.World world = blocksMaterialsMap.get(blocksMaterialsMap.keySet().iterator().next()).get(0).getWorld();
 		for (String material : blocksMaterialsMap.keySet()) {
 			Material materialEnum = Material.getMaterial(material);
-			for (Coordinates coordinates : blocksMaterialsMap.get(material)) {
+			System.out.println(RegionSerializable.materialsVersionConversionMap);
+			Byte data = null;
+			if (RegionSerializable.materialsVersionConversionMap.contains(material)) {
+				String current_version_material_and_data = RegionSerializable.materialsVersionConversionMap.getString(material);
+				String[] material_and_data = current_version_material_and_data.split("\\|");
+				System.out.println(material_and_data[0]);
+				materialEnum = Material.getMaterial(material_and_data[0]);
+				if (material_and_data.length > 1) {
+					try {
+						System.out.println(material_and_data[1]);
+						data = Byte.parseByte(material_and_data[1]);
+					} catch(NumberFormatException e) {
+						
+					}
+					
+				}
+			}
+//			if (material.equals("STONE_BRICKS")) {
+//				materialEnum = Material.getMaterial("SMOOTH_BRICK");
+//			}
+			if (materialEnum == null) { // Check if there has been a problem.
+				System.out.println(material);
+				continue;
+			}
+			for (BlockSerializable blockSerializable : blocksMaterialsMap.get(material)) {
 //				if (location.getBlock().getType() != materialEnum) {
-					coordinates.getLocation(world).getBlock().setType(materialEnum);
+				blockSerializable.setBlock(world, materialEnum, data);
+//				block.setType(materialEnum);
+//				block.setData(data.byteValue());
 //				setBlockInNativeDataPalette(world, location.getBlockX(), location.getBlockY(), location.getBlockZ(), materialEnum.getId(), (byte) 0, true);
 //				}
 			}
@@ -143,5 +178,8 @@ public class RegionSerializable implements ConfigurationSerializable {
 		return true;
 	}
 	
+	public static void reloadConfig() {
+		RegionSerializable.materialsVersionConversionMap = (MemorySection) RegionSaverLoader.getPlugin(RegionSaverLoader.class).getVersionConversionConfig().get("map");
+	}
+	
 }
-
