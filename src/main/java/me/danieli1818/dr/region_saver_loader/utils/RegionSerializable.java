@@ -125,6 +125,10 @@ public class RegionSerializable implements ConfigurationSerializable {
 				
 				String material = location.getBlock().getType().toString();
 				
+				byte data = location.getBlock().getData();
+				
+				material += "|" + Byte.toString(data);
+				
 				if (!blocksMaterialsMap.containsKey(material)) {
 					blocksMaterialsMap.put(material, new ArrayList<BlockSerializable>());
 				}
@@ -165,6 +169,18 @@ public class RegionSerializable implements ConfigurationSerializable {
 //			if (material.equals("STONE_BRICKS")) {
 //				materialEnum = Material.getMaterial("SMOOTH_BRICK");
 //			}
+			String[] material_and_data = material.split("\\|");
+			System.out.println(material_and_data[0]);
+			materialEnum = Material.getMaterial(material_and_data[0]);
+			if (material_and_data.length > 1) {
+				try {
+					System.out.println(material_and_data[1]);
+					data = Byte.parseByte(material_and_data[1]);
+				} catch(NumberFormatException e) {
+					
+				}
+				
+			}
 			if (materialEnum == null) { // Check if there has been a problem.
 				System.out.println(material);
 				continue;

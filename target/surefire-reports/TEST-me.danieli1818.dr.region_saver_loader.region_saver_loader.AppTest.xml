@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="1" failures="0" name="me.danieli1818.dr.region_saver_loader.region_saver_loader.AppTest" time="0.003" errors="0" skipped="0">
+<testsuite tests="1" failures="0" name="me.danieli1818.dr.region_saver_loader.region_saver_loader.AppTest" time="0.015" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_212\jre\bin"/>
@@ -27,7 +27,7 @@
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="user.variant" value=""/>
     <property name="os.name" value="Windows 10"/>
-    <property name="classworlds.conf" value="C:\Users\home\Desktop\Minecraft Modding\MinecraftMod\eclipse\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf8517698233636660495.tmp"/>
+    <property name="classworlds.conf" value="C:\Users\home\Desktop\Minecraft Modding\MinecraftMod\eclipse\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf4665314945391409350.tmp"/>
     <property name="sun.jnu.encoding" value="Cp1255"/>
     <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_212\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:/Program Files/Java/jre1.8.0_271/bin/server;C:/Program Files/Java/jre1.8.0_271/bin;C:/Program Files/Java/jre1.8.0_271/lib/amd64;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Users\home\.dnx\bin;C:\Program Files\Microsoft DNX\Dnvm\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\;C:\Program Files\nodejs\;C:\Program Files\Java\jdk1.8.0_212\bin\;C:\Program Files\Git\cmd;C:\Users\home\Documents\Maven\apache-maven-3.6.2\bin;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\MinGW\msys\1.0\bin;;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\;%SYSTEMROOT%\System32\OpenSSH\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\home\AppData\Local\Microsoft\WindowsApps;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.3.4\bin;;C:\MinGW\msys\1.0\bin;;C:\Users\home\Downloads\eclipse-java-oxygen-2-win32-x86_64\eclipse;;."/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
@@ -61,5 +61,5 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="me.danieli1818.dr.region_saver_loader.region_saver_loader.AppTest" name="testApp" time="0.003"/>
+  <testcase classname="me.danieli1818.dr.region_saver_loader.region_saver_loader.AppTest" name="testApp" time="0.015"/>
 </testsuite>
