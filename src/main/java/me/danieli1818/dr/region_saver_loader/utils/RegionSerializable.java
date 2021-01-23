@@ -11,6 +11,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.type.Slab;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
@@ -121,6 +122,13 @@ public class RegionSerializable implements ConfigurationSerializable {
 				Location location = new Location(Bukkit.getWorld(region.getWorld().getName()), t.getBlockX(), t.getBlockY(), t.getBlockZ());
 				
 				String material = location.getBlock().getType().toString();
+				
+				if (location.getBlock().getBlockData() instanceof Slab) {
+					Slab slab = (Slab) location.getBlock().getBlockData();
+					if (slab.getType() == Slab.Type.DOUBLE) {
+						material = "DOUBLE_" + material;
+					}
+				}
 				
 				if (!blocksMaterialsMap.containsKey(material)) {
 					blocksMaterialsMap.put(material, new ArrayList<BlockSerializable>());
