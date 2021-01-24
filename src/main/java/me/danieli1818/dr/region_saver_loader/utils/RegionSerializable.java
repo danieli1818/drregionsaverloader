@@ -152,8 +152,22 @@ public class RegionSerializable implements ConfigurationSerializable {
 			System.out.println(RegionSerializable.materialsVersionConversionMap);
 			Byte data = null;
 			if (RegionSerializable.materialsVersionConversionMap.contains(material)) {
+				System.out.println("yay");
 				String current_version_material_and_data = RegionSerializable.materialsVersionConversionMap.getString(material);
 				String[] material_and_data = current_version_material_and_data.split("\\|");
+				System.out.println(material + " yay " + material_and_data[0]);
+				materialEnum = Material.getMaterial(material_and_data[0]);
+				if (material_and_data.length > 1) {
+					try {
+						System.out.println(material_and_data[1]);
+						data = Byte.parseByte(material_and_data[1]);
+					} catch(NumberFormatException e) {
+						
+					}
+					
+				}
+			} else {
+				String[] material_and_data = material.split("\\|");
 				System.out.println(material_and_data[0]);
 				materialEnum = Material.getMaterial(material_and_data[0]);
 				if (material_and_data.length > 1) {
@@ -169,20 +183,8 @@ public class RegionSerializable implements ConfigurationSerializable {
 //			if (material.equals("STONE_BRICKS")) {
 //				materialEnum = Material.getMaterial("SMOOTH_BRICK");
 //			}
-			String[] material_and_data = material.split("\\|");
-			System.out.println(material_and_data[0]);
-			materialEnum = Material.getMaterial(material_and_data[0]);
-			if (material_and_data.length > 1) {
-				try {
-					System.out.println(material_and_data[1]);
-					data = Byte.parseByte(material_and_data[1]);
-				} catch(NumberFormatException e) {
-					
-				}
-				
-			}
 			if (materialEnum == null) { // Check if there has been a problem.
-				System.out.println(material);
+				System.out.println("Error " + material);
 				continue;
 			}
 			for (BlockSerializable blockSerializable : blocksMaterialsMap.get(material)) {

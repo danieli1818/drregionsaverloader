@@ -1,3 +1,4 @@
+META-INF\MANIFEST.MF
 me\danieli1818\dr\region_saver_loader\RegionSaverLoader.class
 me\danieli1818\dr\region_saver_loader\utils\RegionSerializable$3.class
 me\danieli1818\dr\region_saver_loader\utils\serialization\block\serializables\DirectionalBlockMaterialData.class
