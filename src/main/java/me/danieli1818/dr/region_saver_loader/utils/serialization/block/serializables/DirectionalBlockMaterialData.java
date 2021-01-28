@@ -55,5 +55,13 @@ public class DirectionalBlockMaterialData implements BlockMaterialData {
 	public BlockFace getBlockFace() {
 		return this.blockFace;
 	}
+	
+	public boolean setBlockFace(BlockFace face) {
+		if (face == null) {
+			return false;
+		}
+		this.blockFace = face;
+		return true;
+	}
 
 }

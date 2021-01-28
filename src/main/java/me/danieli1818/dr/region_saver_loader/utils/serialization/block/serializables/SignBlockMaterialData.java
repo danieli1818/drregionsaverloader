@@ -26,8 +26,15 @@ public class SignBlockMaterialData extends DirectionalBlockMaterialData implemen
 	}
 	
 	public SignBlockMaterialData(Sign sign) {
-		this(((org.bukkit.material.Sign)sign.getData()).getFacing(), sign.getLines()
-				, ((org.bukkit.material.Sign)sign.getData()).isWallSign());
+		this(BlockFace.NORTH, sign.getLines(), false);
+//		super(BlockFace.NORTH);
+//		this.text = sign.getLines();
+//		this.isWallSign = false;
+//		org.bukkit.material.Sign signData = (org.bukkit.material.Sign)sign.getData();
+//		if (signData != null) {
+//			super.setBlockFace(signData.getFacing());
+//			this.isWallSign = signData.isWallSign();
+//		}
 	}
 
 	public Map<String, Object> serialize() {
