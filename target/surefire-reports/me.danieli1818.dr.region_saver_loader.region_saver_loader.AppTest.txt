@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: me.danieli1818.dr.region_saver_loader.region_saver_loader.AppTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.163 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.185 sec
